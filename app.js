@@ -14,12 +14,6 @@ app.set('views', path.join(__dirname, 'views'));
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Log environment variables to verify they are loaded correctly
-console.log('DB_HOST:', process.env.DB_HOST);
-console.log('DB_USER:', process.env.DB_USER);
-console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
-console.log('DB_NAME:', process.env.DB_NAME);
-
 // Create MySQL connection pool
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
@@ -29,16 +23,6 @@ const pool = mysql.createPool({
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
-});
-
-// Test MySQL connection
-pool.getConnection((err, connection) => {
-    if (err) {
-        console.error('Error connecting to MySQL:', err);
-        return;
-    }
-    console.log('Connected to MySQL!');
-    connection.release();
 });
 
 // Basic Authentication Middleware
@@ -216,8 +200,7 @@ app.get('/logout', (req, res) => {
 });
 
 // Start the server
-const PORT = process.env.PORT || 3306;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
-
