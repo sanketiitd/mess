@@ -1,10 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shivalik Hostel Mess</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         /* Basic Styling */
         body {
@@ -38,7 +38,6 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
-            table-layout: fixed; /* Ensures equal column widths */
         }
 
         table, th, td {
@@ -49,9 +48,6 @@
             padding: 10px; /* Reduced padding for mobile */
             text-align: center;
             font-size: 14px; /* Adjusted for mobile */
-            overflow-wrap: break-word; /* Allows text to wrap */
-            word-wrap: break-word; /* For older browsers */
-            white-space: normal; /* Allows text to wrap onto the next line */
         }
 
         th {
@@ -131,7 +127,6 @@
 
         hr {
             margin: 30px 0;
-           
             border: 1px solid #003366; /* Deep Blue */
         }
 
@@ -169,7 +164,7 @@
         <% if (lastUpdated) { %>
             <p style="color: #003366; font-size: 1rem;">[Menu Last changed: <%= lastUpdated %>]</p>
         <% } %>
-        <table>
+        <table id="meal-plan-table">
             <tr>
                 <th>Day</th>
                 <th>Breakfast</th>
@@ -187,6 +182,11 @@
             </tr>
             <% }); %>
         </table>
+
+        <!-- PDF Download Button -->
+        <div class="form-section">
+            <button onclick="downloadPDF()">Download Menu as PDF</button>
+        </div>
 
         <!-- Announcement Section -->
         <div class="announcement-section">
@@ -300,6 +300,29 @@
                 form.style.display = 'none';
                 button.textContent = 'Expand Complaint Box';
             }
+        }
+
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const table = document.getElementById('meal-plan-table');
+
+            // Add title
+            doc.setFontSize(18);
+            doc.text('Weekly Meal Plan', 14, 20);
+            doc.setFontSize(12);
+
+            // Add table
+            const rows = Array.from(table.rows).map(row => Array.from(row.cells).map(cell => cell.innerText));
+            doc.autoTable({
+                head: [rows[0]], // Header row
+                body: rows.slice(1), // Data rows
+                theme: 'grid',
+                margin: { top: 30 },
+            });
+
+            // Save the PDF
+            doc.save('menu.pdf');
         }
     </script>
 </body>
