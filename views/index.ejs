@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shivalik Hostel Mess</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         /* Basic Styling */
         body {
@@ -14,7 +13,6 @@
             padding: 0;
             color: #003366; /* Deep Blue */
         }
-
         .container {
             width: 90%; /* Adjusted for better mobile view */
             margin: 20px auto;
@@ -24,7 +22,6 @@
             border-radius: 8px;
             overflow: hidden;
         }
-
         h1 {
             text-align: center;
             color: #003366; /* Deep Blue */
@@ -33,41 +30,37 @@
             font-size: 28px; /* Reduced size for mobile */
             margin-bottom: 20px;
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
+            table-layout: fixed; /* Ensures equal column widths */
         }
-
         table, th, td {
             border: 1px solid #003366; /* Deep Blue */
         }
-
         th, td {
             padding: 10px; /* Reduced padding for mobile */
             text-align: center;
             font-size: 14px; /* Adjusted for mobile */
+            overflow-wrap: break-word; /* Allows text to wrap */
+            word-wrap: break-word; /* For older browsers */
+            white-space: normal; /* Allows text to wrap onto the next line */
         }
-
         th {
             background-color: #FF6F61; /* Coral */
             color: #FFFFFF; /* White */
         }
-
         td {
             background-color: #FFE5B4; /* Lighter Coral */
         }
-
         /* Make Days column bold */
         table td:first-child {
             font-weight: bold; /* Make the first column (Day) bold */
         }
-
         .form-section {
             margin-bottom: 30px;
         }
-
         .form-section h2 {
             margin-bottom: 10px;
             color: #003366; /* Deep Blue */
@@ -75,7 +68,6 @@
             font-weight: semi-bold;
             font-size: 18px; /* Adjusted for mobile */
         }
-
         .form-section input, .form-section textarea, .form-section select {
             width: 100%;
             padding: 10px; /* Reduced padding for mobile */
@@ -84,7 +76,6 @@
             border-radius: 6px;
             font-size: 1rem; /* Consistent font size */
         }
-
         .form-section button {
             padding: 10px 14px;
             background-color: #FF6F61; /* Coral */
@@ -98,11 +89,9 @@
             transition: background-color 0.3s;
             width: 100%; /* Full width button for mobile */
         }
-
         .form-section button:hover {
             background-color: #FF4C4C; /* Darker Coral */
         }
-
         .announcement {
             background-color: #F5F9FC; /* Very Light Blue */
             padding: 15px;
@@ -110,12 +99,10 @@
             margin-bottom: 15px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
         }
-
         .small-font {
             font-size: 0.85rem;
             color: #777;
         }
-
         .footer {
             text-align: center;
             font-size: 0.9rem;
@@ -124,31 +111,26 @@
             border-top: 2px solid #003366;
             padding-top: 15px;
         }
-
         hr {
             margin: 30px 0;
+           
             border: 1px solid #003366; /* Deep Blue */
         }
-
         /* Media query for mobile responsiveness */
         @media screen and (max-width: 768px) {
             .container {
                 width: 95%; /* Increased width for better mobile view */
             }
-
             h1 {
                 font-size: 2rem; /* Adjusted font size */
             }
-
             .form-section h2 {
                 font-size: 1.6rem; /* Adjusted font size */
             }
-
             .form-section button {
                 padding: 10px 15px; /* Adjusted padding */
                 font-size: 0.9rem; /* Adjusted font size */
             }
-
             table th, table td {
                 font-size: 0.9rem; /* Adjusted font size for table cells */
             }
@@ -158,13 +140,13 @@
 <body>
     <div class="container">
         <h1>Shivalik Hostel Mess</h1>
-        
+
         <!-- Meal Plan Table -->
         <h2>Weekly Meal Plan</h2>
         <% if (lastUpdated) { %>
             <p style="color: #003366; font-size: 1rem;">[Menu Last changed: <%= lastUpdated %>]</p>
         <% } %>
-        <table id="meal-plan-table">
+        <table>
             <tr>
                 <th>Day</th>
                 <th>Breakfast</th>
@@ -182,11 +164,6 @@
             </tr>
             <% }); %>
         </table>
-
-        <!-- PDF Download Button -->
-        <div class="form-section">
-            <button onclick="downloadPDF()">Download Menu as PDF</button>
-        </div>
 
         <!-- Announcement Section -->
         <div class="announcement-section">
@@ -266,7 +243,7 @@
             <p>Originally developed by &copy; 2024 <a href="https://github.com/deadsmash07" target="_blank">Arnav Raj</a></p>
             <p>Modified and updated by Sanket Patil.</p>
         </div>
-        
+
         <hr>    
 
         <!-- Disclaimer section -->
@@ -287,7 +264,6 @@
             }
             return true;
         }
-
         function toggleComplaintForm() {
             const form = document.getElementById('complaint-form');
             const button = document.getElementById('toggle-complaint');
@@ -300,29 +276,6 @@
                 form.style.display = 'none';
                 button.textContent = 'Expand Complaint Box';
             }
-        }
-
-        function downloadPDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            const table = document.getElementById('meal-plan-table');
-
-            // Add title
-            doc.setFontSize(18);
-            doc.text('Weekly Meal Plan', 14, 20);
-            doc.setFontSize(12);
-
-            // Add table
-            const rows = Array.from(table.rows).map(row => Array.from(row.cells).map(cell => cell.innerText));
-            doc.autoTable({
-                head: [rows[0]], // Header row
-                body: rows.slice(1), // Data rows
-                theme: 'grid',
-                margin: { top: 30 },
-            });
-
-            // Save the PDF
-            doc.save('menu.pdf');
         }
     </script>
 </body>
