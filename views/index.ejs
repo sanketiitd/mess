@@ -164,6 +164,34 @@
             </tr>
             <% }); %>
         </table>
+        <br>
+    <button onclick="downloadPDF()">Download Menu</button>
+
+    <script>
+        async function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Grab the table element
+            const table = document.getElementById('dataTable');
+
+            // Convert table rows into an array of data
+            const rows = Array.from(table.querySelectorAll('tr')).map(row =>
+                Array.from(row.querySelectorAll('th, td')).map(cell => cell.textContent)
+            );
+
+            // Add the table rows to the PDF
+            rows.forEach((row, index) => {
+                const y = 10 + (index * 10);
+                row.forEach((cell, cellIndex) => {
+                    doc.text(cell, 10 + (cellIndex * 50), y);
+                });
+            });
+
+            // Save the PDF
+            doc.save('table.pdf');
+        }
+    </script>
 
         <!-- Announcement Section -->
         <div class="announcement-section">
