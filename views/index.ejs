@@ -1,3 +1,9 @@
+To ensure that the content in your table adjusts properly on mobile screens without causing overflow or making any columns invisible, you can modify the CSS styles for the table. Specifically, you'll want to use the `word-wrap` and `overflow` properties to control how text is displayed within table cells.
+
+### Updated Code
+Here's the modified code with adjustments for mobile responsiveness:
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,6 +43,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
+            table-layout: fixed; /* Ensures equal column widths */
         }
 
         table, th, td {
@@ -47,6 +54,9 @@
             padding: 10px; /* Reduced padding for mobile */
             text-align: center;
             font-size: 14px; /* Adjusted for mobile */
+            overflow-wrap: break-word; /* Allows text to wrap */
+            word-wrap: break-word; /* For older browsers */
+            white-space: normal; /* Allows text to wrap onto the next line */
         }
 
         th {
@@ -126,6 +136,7 @@
 
         hr {
             margin: 30px 0;
+           
             border: 1px solid #003366; /* Deep Blue */
         }
 
@@ -182,8 +193,8 @@
             <% }); %>
         </table>
 
-        
- <div class="announcement-section">
+        <!-- Announcement Section -->
+        <div class="announcement-section">
             <h2>Announcements</h2>
             <% if (announcements.length > 0) { %>
                 <% announcements.forEach(function(announcement) { 
@@ -216,6 +227,7 @@
                 <button type="submit">Submit Suggestion</button>
             </form>
         </div>
+
         <!-- Complaint Box -->
         <div class="form-section">
             <h2>Complaint Box</h2>
@@ -251,7 +263,8 @@
                 <li>Collect coupons from the mess office to avail extra messing.</li>
                 <li>Report any meal issues or foreign objects in food to the mess staff or manager immediately.</li>
             </ul>
-        </div
+        </div>
+
         <!-- Copyright Section -->
         <div class="footer">
             <p>&copy; 2024 Sanket Patil - Mess Secretary, Shivalik Hostel</p>
