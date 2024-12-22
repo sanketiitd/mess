@@ -24,31 +24,13 @@
             overflow: hidden;
         }
 
-        h1, h2 {
-            color: #003366; /* Deep Blue */
-        }
-
         h1 {
             text-align: center;
+            color: #003366; /* Deep Blue */
             font-family: 'Montserrat', sans-serif;
             font-weight: bold;
             font-size: 36px;
             margin-bottom: 20px;
-        }
-
-        h2 {
-            margin-bottom: 10px;
-            font-family: 'Raleway', sans-serif;
-            font-weight: semi-bold;
-            font-size: 20px;
-        }
-
-        .guidelines {
-            background-color: #F5F9FC; /* Very Light Blue */
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
         }
 
         table {
@@ -75,6 +57,62 @@
             background-color: #FFE5B4; /* Lighter Coral */
         }
 
+        /* Make Days column bold */
+        table td:first-child {
+            font-weight: bold; /* Make the first column (Day) bold */
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section h2 {
+            margin-bottom: 10px;
+            color: #003366; /* Deep Blue */
+            font-family: 'Raleway', sans-serif;
+            font-weight: semi-bold;
+            font-size: 20px;
+        }
+
+        .form-section input, .form-section textarea, .form-section select {
+            width: 100%;
+            padding: 12px;
+            margin: 5px 0;
+            border: 1px solid #D3D3D3; /* Light Gray */
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .form-section button {
+            padding: 8px 12px;
+            background-color: #FF6F61; /* Coral */
+            color: #FFFFFF; /* White */
+            border: none;
+            border-radius: 4px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: medium;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .form-section button:hover {
+            background-color: #FF4C4C; /* Darker Coral */
+        }
+
+        .announcement {
+            background-color: #F5F9FC; /* Very Light Blue */
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .small-font {
+            font-size: 0.85rem;
+            color: #777;
+        }
+
         .footer {
             text-align: center;
             font-size: 0.9rem;
@@ -84,37 +122,44 @@
             padding-top: 15px;
         }
 
-        .small-font {
-            font-size: 0.85rem;
-            color: #777;
-        }
-
         hr {
             margin: 30px 0;
             border: 1px solid #003366; /* Deep Blue */
+        }
+
+        /* Media query for mobile responsiveness */
+        @media screen and (max-width: 768px) {
+            .container {
+                width: 95%;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+            .form-section h2 {
+                font-size: 1.6rem;
+            }
+
+            .form-section button {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+
+            table th, table td {
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Shivalik Hostel Mess</h1>
-
-        <!-- General Guidelines Section -->
-        <div class="guidelines">
-            <h2>General Guidelines</h2>
-            <ul>
-                <li>Mess SOP for Self-kitchen. Please follow the guidelines and maintain cleanliness in the kitchen area.</li>
-                <li>Extra messing is available in lunch (till 1:30 PM) every day* except Wednesday, Saturday, and Sunday.</li>
-                <li>Maintaining cleanliness in the mess area is everyone's responsibility. Dispose of waste properly and avoid littering.</li>
-                <li>For any special dietary requirements or preferences, kindly inform the mess office in advance. We strive to accommodate all reasonable requests.</li>
-                <li>To avail of extra-messing benefits, please collect the necessary coupons from the mess office.</li>
-                <li>Please adhere to the mess timings strictly. Latecomers may not be served, so plan your meals accordingly. Dinner after 9:05 PM is strictly for sportspeople only.</li>
-                <li>If you encounter any issues with your meal, such as finding it unsatisfactory or discovering foreign objects in the food, please notify the mess staff or the manager immediately.</li>
-            </ul>
-        </div>
-
+        
         <!-- Meal Plan Table -->
         <h2>Weekly Meal Plan</h2>
+        <% if (lastUpdated) { %>
+            <p style="color: #003366; font-size: 1rem;">[Menu Last changed: <%= lastUpdated %>]</p>
+        <% } %>
         <table>
             <tr>
                 <th>Day</th>
@@ -123,61 +168,105 @@
                 <th>Evening Snacks</th>
                 <th>Dinner</th>
             </tr>
+            <% ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].forEach(function(day) { %>
             <tr>
-                <td>Monday</td>
-                <td>Poori Bhaji</td>
-                <td>Dal Rice</td>
-                <td>Tea & Biscuits</td>
-                <td>Paneer Curry</td>
+                <td><%= day.charAt(0).toUpperCase() + day.slice(1) %></td>
+                <td><%= mealPlan[day] && mealPlan[day].breakfast ? mealPlan[day].breakfast : '' %></td>
+                <td><%= mealPlan[day] && mealPlan[day].lunch ? mealPlan[day].lunch : '' %></td>
+                <td><%= mealPlan[day] && mealPlan[day].snacks ? mealPlan[day].snacks : '' %></td>
+                <td><%= mealPlan[day] && mealPlan[day].dinner ? mealPlan[day].dinner : '' %></td>
             </tr>
-            <tr>
-                <td>Tuesday</td>
-                <td>Idli Sambhar</td>
-                <td>Rajma Rice</td>
-                <td>Pakoras</td>
-                <td>Chicken Curry</td>
-            </tr>
-            <tr>
-                <td>Wednesday</td>
-                <td>Aloo Paratha</td>
-                <td>Mixed Veg Curry</td>
-                <td>Fruit Salad</td>
-                <td>Egg Curry</td>
-            </tr>
-            <tr>
-                <td>Thursday</td>
-                <td>Uttapam</td>
-                <td>Chole Rice</td>
-                <td>Samosa</td>
-                <td>Dal Tadka</td>
-            </tr>
-            <tr>
-                <td>Friday</td>
-                <td>Bread Butter</td>
-                <td>Dal Fry</td>
-                <td>Tea & Chips</td>
-                <td>Fish Fry</td>
-            </tr>
-            <tr>
-                <td>Saturday</td>
-                <td>Pav Bhaji</td>
-                <td>Veg Biryani</td>
-                <td>Milk & Cookies</td>
-                <td>Paneer Butter Masala</td>
-            </tr>
-            <tr>
-                <td>Sunday</td>
-                <td>Dosa Sambhar</td>
-                <td>Chicken Biryani</td>
-                <td>Cold Coffee</td>
-                <td>Special Thali</td>
-            </tr>
+            <% }); %>
         </table>
 
-        <!-- Footer -->
+        <!-- Suggestion Box -->
+        <div class="form-section">
+            <h2>Suggestion Box</h2>
+            <form action="/submit-suggestion" method="POST" onsubmit="return validateSuggestion()">
+                <textarea id="suggestion" name="suggestion" rows="4" placeholder="Your suggestion..." required></textarea>
+                <button type="submit">Submit Suggestion</button>
+            </form>
+        </div>
+
+        <!-- Complaint Box -->
+        <div class="form-section">
+            <h2>Complaint Box</h2>
+            <button id="toggle-complaint" onclick="toggleComplaintForm()">Expand Complaint Box</button>
+            <div id="complaint-form" style="display: none;">
+                <form action="/submit-complaint" method="POST">
+                    <label for="complaint-date">Select Date:</label>
+                    <input type="date" id="complaint-date" name="date" required>
+                    <label for="meal-type">Select Meal:</label>
+                    <select id="meal-type" name="meal" required>
+                        <option value="breakfast">Breakfast</option>
+                        <option value="lunch">Lunch</option>
+                        <option value="snacks">Evening Snacks</option>
+                        <option value="dinner">Dinner</option>
+                    </select>
+                    <label for="complaint-name">Your Name:</label>
+                    <input type="text" id="complaint-name" name="name" placeholder="Your name..." required>
+                    <label for="complaint-mobile">Your Mobile Number:</label>
+                    <input type="tel" id="complaint-mobile" name="mobile" placeholder="Your mobile number..." required>
+                    <textarea id="complaint" name="complaint" rows="4" placeholder="Your complaint..." required></textarea>
+                    <button type="submit">Submit Complaint</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- General Guidelines -->
+        <div class="form-section">
+            <h2>General Guidelines</h2>
+            <ul>
+                <li>Mess SOP for Self-kitchen. Please follow the guidelines and maintain cleanliness in the kitchen area.</li>
+                <li>Extra messing is available in lunch (till 1:30 PM) everyday* except Wednesday, Saturday, and Sunday.</li>
+                <li>Maintaining cleanliness in the mess area is everyone's responsibility. Dispose of waste properly and avoid littering.</li>
+                <li>For any special dietary requirements or preferences, kindly inform the mess office in advance. We strive to accommodate all reasonable requests.</li>
+                <li>To avail of extra-messing benefits, please collect the necessary coupons from the mess office.</li>
+                <li>Please adhere to the mess timings strictly. Latecomers may not be served, so plan your meals accordingly. Dinner after 9:05 PM is strictly for sports people only.</li>
+                <li>If you encounter any issues with your meal, such as finding it unsatisfactory or discovering foreign objects in the food, please notify the mess staff or the manager immediately.</li>
+            </ul>
+        </div>
+
+        <!-- Copyright Section -->
         <div class="footer">
             <p>&copy; 2024 Sanket Patil - Mess Secretary, Shivalik Hostel, IIT Delhi</p>
+            <p>&copy; 2024 <a href="https://github.com/deadsmash07" target="_blank">Arnav Raj</a> - Mess Secretary, Zanskar Hostel, IIT Delhi</p>
+        </div>
+        
+        <hr>    
+
+        <!-- Disclaimer section -->
+        <div class="form-section">
+            <p class="small-font">
+                This website is intended for informational purposes only, and the content provided here may be updated periodically. The Mess reserves the right to modify the menu, announcements, and other details as necessary.
+                *Please note that the availability of extra messing is subject to change based on the Mess workload and item availability.
+            </p>
         </div>
     </div>
+
+    <script>
+        function validateSuggestion() {
+            const suggestion = document.getElementById('suggestion').value.trim();
+            if (suggestion === '') {
+                alert('Suggestion cannot be empty');
+                return false;
+            }
+            return true;
+        }
+
+        function toggleComplaintForm() {
+            const form = document.getElementById('complaint-form');
+            const button = document.getElementById('toggle-complaint');
+            
+            // Toggle the display property
+            if (form.style.display === 'none') {
+                form.style.display = 'block';
+                button.textContent = 'Collapse Complaint Box';
+            } else {
+                form.style.display = 'none';
+                button.textContent = 'Expand Complaint Box';
+            }
+        }
+    </script>
 </body>
 </html>
