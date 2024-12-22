@@ -1,8 +1,4 @@
-Here's the full code for your EJS file, including the "Download Menu as PDF" button functionality using the `jsPDF` library. This code integrates the button and the JavaScript function to generate the PDF from the meal plan table.
 
-### Complete `index.ejs` Code
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -120,9 +116,6 @@ Here's the full code for your EJS file, including the "Download Menu as PDF" but
             border: 1px solid #003366; /* Deep Blue */
         }
         @media screen and (max-width: 768px)
-        Sure! Here’s the continuation of your `index.ejs` file with the "Download Menu as PDF" functionality included:
-
-```html
         /* Media query for mobile responsiveness */
         @media screen and (max-width: 768px) {
             .container {
@@ -143,7 +136,8 @@ Here's the full code for your EJS file, including the "Download Menu as PDF" but
             }
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.7/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body>
     <div class="container">
