@@ -1,3 +1,8 @@
+Here's the full code for your EJS file, including the "Download Menu as PDF" button functionality using the `jsPDF` library. This code integrates the button and the JavaScript function to generate the PDF from the meal plan table.
+
+### Complete `index.ejs` Code
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,7 +59,6 @@
         td {
             background-color: #FFE5B4; /* Lighter Coral */
         }
-        /* Make Days column bold */
         table td:first-child {
             font-weight: bold; /* Make the first column (Day) bold */
         }
@@ -113,9 +117,12 @@
         }
         hr {
             margin: 30px 0;
-           
             border: 1px solid #003366; /* Deep Blue */
         }
+        @media screen and (max-width: 768px)
+        Sure! Here’s the continuation of your `index.ejs` file with the "Download Menu as PDF" functionality included:
+
+```html
         /* Media query for mobile responsiveness */
         @media screen and (max-width: 768px) {
             .container {
@@ -136,6 +143,7 @@
             }
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -146,7 +154,7 @@
         <% if (lastUpdated) { %>
             <p style="color: #003366; font-size: 1rem;">[Menu Last changed: <%= lastUpdated %>]</p>
         <% } %>
-        <table>
+        <table id="mealPlanTable">
             <tr>
                 <th>Day</th>
                 <th>Breakfast</th>
@@ -164,6 +172,9 @@
             </tr>
             <% }); %>
         </table>
+        
+        <!-- Download PDF Button -->
+        <button id="download-pdf" onclick="downloadPDF()">Download Menu as PDF</button>
 
         <!-- Announcement Section -->
         <div class="announcement-section">
@@ -201,69 +212,33 @@
         </div>
 
         <!-- Complaint Box -->
-       <style>
-    .form-section input, 
-    .form-section select, 
-    .form-section textarea, 
-    .form-section button {
-        font-family: Arial, sans-serif; /* Consistent font family */
-        font-size: 14px; /* Uniform font size */
-    }
-
-    .form-section input::placeholder, 
-    .form-section textarea::placeholder {
-        font-family: Arial, sans-serif; /* Placeholder text font */
-        font-size: 14px; /* Placeholder text font size */
-        color: gray; /* Optional placeholder text color */
-    }
-
-    .form-section {
-        margin: 20px; /* Optional: Add some spacing around the form section */
-    }
-
-    .form-section label {
-        font-family: Arial, sans-serif;
-        font-size: 14px;
-    }
-
-    .form-section button {
-        margin-top: 10px; /* Add spacing for better layout */
-    }
-
-    .form-section br {
-        margin-bottom: 10px; /* Ensure adequate spacing between elements */
-    }
-</style>
-
-<div class="form-section">
-    <h2>Complaint Box</h2>
-    <button id="toggle-complaint" onclick="toggleComplaintForm()">Expand Complaint Box</button>
-    <div id="complaint-form" style="display: none;">
-        <form action="/submit-complaint" method="POST">
-            <label for="complaint-date">Select Date:</label><br>
-            <input type="date" id="complaint-date" name="date" placeholder="dd/mm/yyyy" required><br><br>
-            
-            <label for="meal-type">Select Meal:</label><br>
-            <select id="meal-type" name="meal" required>
-                <option value="breakfast">Breakfast</option>
-                <option value="lunch">Lunch</option>
-                <option value="snacks">Evening Snacks</option>
-                <option value="dinner">Dinner</option>
-            </select><br><br>
-            
-            <label for="complaint-name">Your Name:</label><br>
-            <input type="text" id="complaint-name" name="name" placeholder="Your name..." required><br><br>
-            
-            <label for="complaint-mobile">Your Mobile Number:</label><br>
-            <input type="tel" id="complaint-mobile" name="mobile" placeholder="Your mobile number..." required><br><br>
-            
-            <textarea id="complaint" name="complaint" rows="4" placeholder="Your complaint..." required></textarea><br><br>
-            
-            <button type="submit">Submit Complaint</button>
-        </form>
-    </div>
-</div>
-
+        <div class="form-section">
+            <h2>Complaint Box</h2>
+            <button id="toggle-complaint" onclick="toggleComplaintForm()">Expand Complaint Box</button>
+            <div id="complaint-form" style="display: none;">
+                <form action="/submit-complaint" method="POST">
+                    <label for="complaint-date">Select Date:</label><br>
+                    <input type="date" id="complaint-date" name="date" placeholder="dd/mm/yyyy" required><br><br>
+                    <label for="meal-type">Select Meal:</label><br>
+                    <select id="meal-type" name="meal" required>
+                        <option value="breakfast">Breakfast</option>
+                        <option value="lunch">Lunch</option>
+                        <option value="snacks">Evening Snacks</option>
+                        <option value="dinner">Dinner</option>
+                    </select><br><br>
+                    
+                    <label for="complaint-name">Your Name:</label><br>
+                    <input type="text" id="complaint-name" name="name" placeholder="Your name..." required><br><br>
+                    
+                    <label for="complaint-mobile">Your Mobile Number:</label><br>
+                    <input type="tel" id="complaint-mobile" name="mobile" placeholder="Your mobile number..." required><br><br>
+                    
+                    <textarea id="complaint" name="complaint" rows="4" placeholder="Your complaint..." required></textarea><br><br>
+                    
+                    <button type="submit">Submit Complaint</button>
+                </form>
+            </div>
+        </div>
 
         <!-- General Guidelines -->
         <div class="form-section">
@@ -304,6 +279,7 @@
             }
             return true;
         }
+        
         function toggleComplaintForm() {
             const form = document.getElementById('complaint-form');
             const button = document.getElementById('toggle-complaint');
@@ -316,6 +292,44 @@
                 form.style.display = 'none';
                 button.textContent = 'Expand Complaint Box';
             }
+        }
+
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Set title
+            doc.setFontSize(18);
+            doc.text("Weekly Meal Plan", 14, 20);
+
+            // Add a line break
+            doc.setFontSize(12);
+            doc.text(`Menu Last changed: ${document.querySelector('p').textContent}`, 14, 30);
+
+            // Get the meal plan table
+            const table = document.querySelector("#mealPlanTable");
+            const rows = table.querySelectorAll("tr");
+
+            // Prepare the data for the PDF
+            const pdfRows = [];
+            rows.forEach(row => {
+                const columns = row.querySelectorAll("th, td");
+                const pdfRow = Array.from(columns).map(col => col.textContent);
+                pdfRows.push(pdfRow);
+            });
+
+            // Add the table to the PDF
+            doc.autoTable({
+                head: [pdfRows[0]], // First row as header
+                body: pdfRows.slice(1), // Remaining rows as body
+                startY: 40, // Start after title
+                theme: 'grid', // Optional: style of the table
+                headStyles: { fillColor: [255, 111, 97] }, // Coral color for header
+                margin: { top: 10 },
+            });
+
+            // Save the PDF
+            doc.save('weekly_meal_plan.pdf');
         }
     </script>
 </body>
