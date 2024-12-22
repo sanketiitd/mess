@@ -1,3 +1,6 @@
+Here’s the adjusted HTML code for the admin panel of the Shivalik Hostel Mess, optimized for mobile devices while keeping the original structure intact:
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,16 +16,16 @@
             padding: 0;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start; /* Align top for better mobile experience */
             flex-direction: column;
         }
 
         .container {
-            width: 80%;
+            width: 90%; /* Adjusted width for better mobile view */
             max-width: 1200px;
             margin: 20px auto;
             background-color: #FFFFFF; /* White background */
-            padding: 30px;
+            padding: 20px; /* Adjusted padding */
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
             box-sizing: border-box;
@@ -31,13 +34,13 @@
         h1 {
             text-align: center;
             color: #003366; /* Deep Blue */
-            font-size: 28px;
-            margin-bottom: 40px;
+            font-size: 24px; /* Reduced size for mobile */
+            margin-bottom: 30px; /* Adjusted margin */
         }
 
         a {
             color: #003366; /* Deep Blue */
-            font-size: 16px;
+            font-size: 14px; /* Adjusted font size */
             text-decoration: none;
             font-weight: 600;
             display: block;
@@ -54,29 +57,29 @@
         }
 
         .form-section h2 {
-            font-size: 22px;
+            font-size: 20px; /* Adjusted for mobile */
             color: #003366; /* Deep Blue */
             margin-bottom: 15px;
         }
 
         .form-section input, .form-section textarea, .form-section select {
             width: 100%;
-            padding: 12px;
+            padding: 10px; /* Adjusted padding */
             margin: 8px 0;
             border: 1px solid #D3D3D3; /* Light Gray */
             border-radius: 6px;
-            font-size: 16px;
+            font-size: 14px; /* Adjusted for mobile */
             box-sizing: border-box;
         }
 
         .form-section button {
-            padding: 12px 20px;
+            padding: 10px 16px; /* Adjusted padding */
             background-color: #FF6F61; /* Coral */
             color: #FFFFFF; /* White */
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 14px; /* Adjusted for mobile */
             font-weight: 500;
             transition: background-color 0.3s;
         }
@@ -92,9 +95,10 @@
         }
 
         table th, table td {
-            padding: 15px;
+            padding: 12px; /* Adjusted padding */
             text-align: left;
             border-bottom: 1px solid #ddd;
+            font-size: 14px; /* Adjusted for mobile */
         }
 
         table th {
@@ -114,7 +118,7 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 12px; /* Adjusted for mobile */
         }
 
         .delete-button:hover {
@@ -124,6 +128,30 @@
         .form-section textarea {
             resize: vertical;
             min-height: 80px;
+        }
+
+        /* Media query for mobile responsiveness */
+        @media screen and (max-width: 768px) {
+            .container {
+                width: 95%; /* Increased width for better mobile view */
+            }
+
+            h1 {
+                font-size: 2rem; /* Adjusted font size */
+            }
+
+            .form-section h2 {
+                font-size: 1.6rem; /* Adjusted font size */
+            }
+
+            .form-section button {
+                padding: 10px 15px; /* Adjusted padding */
+                font-size: 0.9rem; /* Adjusted font size */
+            }
+
+            table th, table td {
+                font-size: 0.9rem; /* Adjusted font size for table cells */
+            }
         }
     </style>
 </head>
