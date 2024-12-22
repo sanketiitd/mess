@@ -32,7 +32,6 @@
             font-size: 36px;
             margin-bottom: 20px;
         }
-        
 
         table {
             width: 100%;
@@ -215,31 +214,34 @@
             </form>
         </div>
 
-        <!-- Complaint Box -->
+        <!-- Complaint Box with Collapse/Expand Feature -->
         <div class="form-section">
             <h2>Complaint Box</h2>
-            <form action="/submit-complaint" method="POST">
-                <label for="complaint-date">Select Date:</label>
-                <input type="date" id="complaint-date" name="date" required>
-                <label for="meal-type">Select Meal:</label>
-                <select id="meal-type" name="meal" required>
-                    <option value="breakfast">Breakfast</option>
-                    <option value="lunch">Lunch</option>
-                    <option value="snacks">Evening Snacks</option>
-                    <option value="dinner">Dinner</option>
-                </select>
-                <label for="complaint-name">Your Name:</label>
-                <input type="text" id="complaint-name" name="name" placeholder="Your name..." required>
-                <label for="complaint-mobile">Your Mobile Number:</label>
-                <input type="tel" id="complaint-mobile" name="mobile" placeholder="Your mobile number..." required>
-                <textarea id="complaint" name="complaint" rows="4" placeholder="Your complaint..." required></textarea>
-                <button type="submit">Submit Complaint</button>
-            </form>
+            <button id="toggle-complaint" onclick="toggleComplaintForm()">Expand Complaint Box</button>
+            <div id="complaint-form" style="display: none;">
+                <form action="/submit-complaint" method="POST">
+                    <label for="complaint-date">Select Date:</label>
+                    <input type="date" id="complaint-date" name="date" required>
+                    <label for="meal-type">Select Meal:</label>
+                    <select id="meal-type" name="meal" required>
+                        <option value="breakfast">Breakfast</option>
+                        <option value="lunch">Lunch</option>
+                        <option value="snacks">Evening Snacks</option>
+                        <option value="dinner">Dinner</option>
+                    </select>
+                    <label for="complaint-name">Your Name:</label>
+                    <input type="text" id="complaint-name" name="name" placeholder="Your name..." required>
+                    <label for="complaint-mobile">Your Mobile Number:</label>
+                    <input type="tel" id="complaint-mobile" name="mobile" placeholder="Your mobile number..." required>
+                    <textarea id="complaint" name="complaint" rows="4" placeholder="Your complaint..." required></textarea>
+                    <button type="submit">Submit Complaint</button>
+                </form>
+            </div>
         </div>
 
         <!-- Copyright Section -->
         <div class="footer">
-            <p>&copy; 2024 Sanket Patil</a> - Mess Secretary, Shivalik Hostel, IIT Delhi</p>
+            <p>&copy; 2024 Sanket Patil - Mess Secretary, Shivalik Hostel, IIT Delhi</p>
             <p>&copy; 2024 <a href="https://github.com/deadsmash07" target="_blank">Arnav Raj</a> - Mess Secretary, Zanskar Hostel, IIT Delhi</p>
         </div>
         
@@ -262,6 +264,20 @@
                 return false;
             }
             return true;
+        }
+
+        function toggleComplaintForm() {
+            const form = document.getElementById('complaint-form');
+            const button = document.getElementById('toggle-complaint');
+            
+            // Toggle the display property
+            if (form.style.display === 'none') {
+                form.style.display = 'block';
+                button.textContent = 'Collapse Complaint Box';
+            } else {
+                form.style.display = 'none';
+                button.textContent = 'Expand Complaint Box';
+            }
         }
     </script>
 </body>
