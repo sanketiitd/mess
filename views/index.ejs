@@ -136,186 +136,215 @@
             }
         }
     </style>
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.7/jspdf.plugin.autotable.min.js"></script>
-    </head>
-    <body>
-        <div class="container">
-            <h1>Shivalik Hostel Mess</h1>
-    
-            <!-- Meal Plan Table -->
-            <h2>Weekly Meal Plan</h2>
-            <% if (lastUpdated) { %>
-                <p style="color: #003366; font-size: 1rem;">[Menu Last changed: <%= lastUpdated %>]</p>
-            <% } %>
-            <table id="mealPlanTable">
-                <tr>
-                    <th>Day</th>
-                    <th>Breakfast</th>
-                    <th>Lunch</th>
-                    <th>Evening Snacks</th>
-                    <th>Dinner</th>
-                </tr>
-                <% ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].forEach(function(day) { %>
-                <tr>
-                    <td><%= day.charAt(0).toUpperCase() + day.slice(1) %></td>
-                    <td><%= mealPlan[day] && mealPlan[day].breakfast ? mealPlan[day].breakfast : '' %></td>
-                    <td><%= mealPlan[day] && mealPlan[day].lunch ? mealPlan[day].lunch : '' %></td>
-                    <td><%= mealPlan[day] && mealPlan[day].snacks ? mealPlan[day].snacks : '' %></td>
-                    <td><%= mealPlan[day] && mealPlan[day].dinner ? mealPlan[day].dinner : '' %></td>
-                </tr>
-                <% }); %>
-            </table>
-    
-            <!-- Download PDF Button -->
-            <button id="download-pdf" onclick="downloadPDF()">Download Menu as PDF</button>
-    
-            <!-- Announcement Section -->
-            <div class="announcement-section">
-                <h2>Announcements</h2>
-                <% if (announcements.length > 0) { %>
-                    <% announcements.forEach(function(announcement) { 
-                        let announcementDate = new Date(announcement.created_at);
-                        announcementDate.setHours(announcementDate.getHours() + 5);
-                        announcementDate.setMinutes(announcementDate.getMinutes() + 30);
-                        let formattedDate = announcementDate.toLocaleDateString('en-IN', {
-                            weekday: 'short',
-                            month: 'short',
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit',
-                        });
-                    %>
-                    <div class="announcement">
-                        <p><%= announcement.announcement %></p>
-                        <small class="small-font">[<%= formattedDate %>]</small>
-                    </div>
-                    <% }); %>
-                <% } else { %>
-                    <div class="announcement">No announcements yet.</div>
-                <% } %>
-            </div>
-    
-            <!-- Suggestion Box -->
-            <div class="form-section">
-                <h2>Suggestion Box</h2>
-                <form action="/submit-suggestion" method="POST" onsubmit="return validateSuggestion()">
-                    <textarea id="suggestion" name="suggestion" rows="4" placeholder="Your suggestion..." required></textarea>
-                    <button type="submit">Submit Suggestion</button>
-                </form>
-            </div>
-    
-            <!-- Complaint Box -->
-            <div class="form-section">
-                <h2>Complaint Box</h2>
-                <button id="toggle-complaint" onclick="toggleComplaintForm()">Expand Complaint Box</button>
-                <div id="complaint-form" style="display: none;">
-                    <form action="/submit-complaint" method="POST">
-                        <label for="complaint-date">Select Date:</label><br>
-                        <input type="date" id="complaint-date" name="date" placeholder="dd/mm/yyyy" required><br><br>
-                        
-                        <label for="meal-type">Select Meal:</label><br>
-                        <select id="meal-type" name="meal" required>
-                            <option value="breakfast">Breakfast</option>
-                            <option value="lunch">Lunch</option>
-                            <option value="snacks">Evening Snacks</option>
-                            <option value="dinner">Dinner</option>
-                        </select><br><br>
-                        
-                        <label for="complaint-name">Your Name:</label><br>
-                        <input type="text" id="complaint-name" name="name" placeholder="Your name..." required><br><br>
-                        
-                        <label for="complaint-mobile">Your Mobile Number:</label><br>
-                        <input type="tel" id="complaint-mobile" name="mobile" placeholder="Your mobile number..." required><br><br>
-                        <textarea id="complaint" name="complaint" rows="4" placeholder="Your complaint..." required></textarea><br><br>
-                    
-                        <button type="submit">Submit Complaint</button>
-                    </form>
-                </div>
-            </div>
-    
-            <!-- General Guidelines -->
-            <div class="form-section">
-                <h2>General Guidelines</h2>
-                <ul>
-                    <li>Extra messing is available during lunch from 12:30 to 1:30 PM, except on Tuesdays, Saturdays, and Sundays.</li>
-                    <li>Dispose of waste properly and ensure the mess area remains clean.</li>
-                    <li>Inform the mess office in advance for any special dietary requirements.</li>
-                    <li>Collect coupons from the mess office to avail extra messing.</li>
-                    <li>Report any meal issues or foreign objects in food to the mess staff or manager immediately.</li>
-                </ul>
-            </div>
-    
-            <!-- Copyright Section -->
-            <div class="footer">
-                <p>&copy; 2024 Sanket Patil - Mess Secretary, Shivalik Hostel</p>
-                <p>Originally developed by &copy; 2024 <a href="https://github.com/deadsmash07" target="_blank">Arnav Raj</a></p>
-                <p>Modified and updated by Sanket Patil.</p>
-            </div>
-    
-            <hr>    
-    
-            <!-- Disclaimer section -->
-            <div class="form-section">
-                <p class="small-font">
-                    This website is intended for informational purposes only, and the content provided here may be updated periodically. The Mess reserves the right to modify the menu, announcements, and other details as necessary.
-                    *Please note that the availability of extra messing is subject to change based on the Mess workload and item availability.
-                </p>
-            </div>
-        </div>
-    
-        <script>
-            function validateSuggestion() {
-                const suggestion = document.getElementById('suggestion').value.trim();
-                if (suggestion === '') {
-                    alert('Suggestion cannot be empty');
-                    return false;
-                }
-                return true;
-            }
-    
-            function toggleComplaintForm() {
-                const form = document.getElementById('complaint-form');
-                const button = document.getElementById('toggle-complaint');
-                
-                // Toggle the display property
-                if (form.style.display === 'none') {
-                    form.style.display = 'block';
-                    button.textContent = 'Collapse Complaint Box';
-                } else {
-                    form.style.display = 'none';
-                    button.textContent = 'Expand Complaint Box';
-                }
-            }
-    
-            async function downloadPDF() {
-                const { jsPDF } = window.jspdf;
-                const { autoTable } = window.jspdf;
-    
-                const doc = new jsPDF();
-    
-                // Set title
-                doc.setFontSize(18);
-                doc.text("Weekly Meal Plan", 14, 20);
-    
-                // Grab the table element
-                const table = document.getElementById("mealPlanTable");
-                const rows = Array.from(table.querySelectorAll("tr")).map(row =>
-                    Array.from(row.querySelectorAll("th, td")).map(cell => cell.textContent)
-                );
-    
-                // Add the table to the PDF
-                autoTable(doc, {
-                    head: [rows[0]], // First row as header
-                    body: rows.slice(1), // Remaining rows as body
-                    startY: 40, // Start after title
-                    theme: 'grid', // Optional: style of the table
-                    headStyles: { fillColor: [255, 111, 97] }, // Coral color for header
+</head>
+<body>
+    <div class="container">
+        <h1>Shivalik Hostel Mess</h1>
+
+        <!-- Meal Plan Table -->
+        <h2>Weekly Meal Plan</h2>
+        <% if (lastUpdated) { %>
+            <p style="color: #003366; font-size: 1rem;">[Menu Last changed: <%= lastUpdated %>]</p>
+        <% } %>
+        <table>
+            <tr>
+                <th>Day</th>
+                <th>Breakfast</th>
+                <th>Lunch</th>
+                <th>Evening Snacks</th>
+                <th>Dinner</th>
+            </tr>
+            <% ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].forEach(function(day) { %>
+            <tr>
+                <td><%= day.charAt(0).toUpperCase() + day.slice(1) %></td>
+                <td><%= mealPlan[day] && mealPlan[day].breakfast ? mealPlan[day].breakfast : '' %></td>
+                <td><%= mealPlan[day] && mealPlan[day].lunch ? mealPlan[day].lunch : '' %></td>
+                <td><%= mealPlan[day] && mealPlan[day].snacks ? mealPlan[day].snacks : '' %></td>
+                <td><%= mealPlan[day] && mealPlan[day].dinner ? mealPlan[day].dinner : '' %></td>
+            </tr>
+            <% }); %>
+        </table>
+        <br>
+    <button onclick="downloadPDF()">Download Menu</button>
+
+    <script>
+        async function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Grab the table element
+            const table = document.getElementById('dataTable');
+
+            // Convert table rows into an array of data
+            const rows = Array.from(table.querySelectorAll('tr')).map(row =>
+                Array.from(row.querySelectorAll('th, td')).map(cell => cell.textContent)
+            );
+
+            // Add the table rows to the PDF
+            rows.forEach((row, index) => {
+                const y = 10 + (index * 10);
+                row.forEach((cell, cellIndex) => {
+                    doc.text(cell, 10 + (cellIndex * 50), y);
                 });
-    
-                // Save the PDF
-                doc.save('weekly_meal_plan.pdf');
+            });
+
+            // Save the PDF
+            doc.save('table.pdf');
+        }
+    </script>
+
+        <!-- Announcement Section -->
+        <div class="announcement-section">
+            <h2>Announcements</h2>
+            <% if (announcements.length > 0) { %>
+                <% announcements.forEach(function(announcement) { 
+                    let announcementDate = new Date(announcement.created_at);
+                    announcementDate.setHours(announcementDate.getHours() + 5);
+                    announcementDate.setMinutes(announcementDate.getMinutes() + 30);
+                    let formattedDate = announcementDate.toLocaleDateString('en-IN', {
+                        weekday: 'short',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                    });
+                %>
+                <div class="announcement">
+                    <p><%= announcement.announcement %></p>
+                    <small class="small-font">[<%= formattedDate %>]</small>
+                </div>
+                <% }); %>
+            <% } else { %>
+                <div class="announcement">No announcements yet.</div>
+            <% } %>
+        </div>
+
+        <!-- Suggestion Box -->
+        <div class="form-section">
+            <h2>Suggestion Box</h2>
+            <form action="/submit-suggestion" method="POST" onsubmit="return validateSuggestion()">
+                <textarea id="suggestion" name="suggestion" rows="4" placeholder="Your suggestion..." required></textarea>
+                <button type="submit">Submit Suggestion</button>
+            </form>
+        </div>
+
+        <!-- Complaint Box -->
+       <style>
+    .form-section input, 
+    .form-section select, 
+    .form-section textarea, 
+    .form-section button {
+        font-family: Arial, sans-serif; /* Consistent font family */
+        font-size: 14px; /* Uniform font size */
+    }
+
+    .form-section input::placeholder, 
+    .form-section textarea::placeholder {
+        font-family: Arial, sans-serif; /* Placeholder text font */
+        font-size: 14px; /* Placeholder text font size */
+        color: gray; /* Optional placeholder text color */
+    }
+
+    .form-section {
+        margin: 20px; /* Optional: Add some spacing around the form section */
+    }
+
+    .form-section label {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+    }
+
+    .form-section button {
+        margin-top: 10px; /* Add spacing for better layout */
+    }
+
+    .form-section br {
+        margin-bottom: 10px; /* Ensure adequate spacing between elements */
+    }
+</style>
+
+<div class="form-section">
+    <h2>Complaint Box</h2>
+    <button id="toggle-complaint" onclick="toggleComplaintForm()">Expand Complaint Box</button>
+    <div id="complaint-form" style="display: none;">
+        <form action="/submit-complaint" method="POST">
+            <label for="complaint-date">Select Date:</label><br>
+            <input type="date" id="complaint-date" name="date" placeholder="dd/mm/yyyy" required><br><br>
+            
+            <label for="meal-type">Select Meal:</label><br>
+            <select id="meal-type" name="meal" required>
+                <option value="breakfast">Breakfast</option>
+                <option value="lunch">Lunch</option>
+                <option value="snacks">Evening Snacks</option>
+                <option value="dinner">Dinner</option>
+            </select><br><br>
+            
+            <label for="complaint-name">Your Name:</label><br>
+            <input type="text" id="complaint-name" name="name" placeholder="Your name..." required><br><br>
+            
+            <label for="complaint-mobile">Your Mobile Number:</label><br>
+            <input type="tel" id="complaint-mobile" name="mobile" placeholder="Your mobile number..." required><br><br>
+            
+            <textarea id="complaint" name="complaint" rows="4" placeholder="Your complaint..." required></textarea><br><br>
+            
+            <button type="submit">Submit Complaint</button>
+        </form>
+    </div>
+</div>
+
+
+        <!-- General Guidelines -->
+        <div class="form-section">
+            <h2>General Guidelines</h2>
+            <ul>
+                <li>Extra messing is available during lunch from 12:30 to 1:30 PM, except on Tuesdays, Saturdays, and Sundays.</li>
+                <li>Dispose of waste properly and ensure the mess area remains clean.</li>
+                <li>Inform the mess office in advance for any special dietary requirements.</li>
+                <li>Collect coupons from the mess office to avail extra messing.</li>
+                <li>Report any meal issues or foreign objects in food to the mess staff or manager immediately.</li>
+            </ul>
+        </div>
+
+        <!-- Copyright Section -->
+        <div class="footer">
+            <p>&copy; 2024 Sanket Patil - Mess Secretary, Shivalik Hostel</p>
+            <p>Originally developed by &copy; 2024 <a href="https://github.com/deadsmash07" target="_blank">Arnav Raj</a></p>
+            <p>Modified and updated by Sanket Patil.</p>
+        </div>
+
+        <hr>    
+
+        <!-- Disclaimer section -->
+        <div class="form-section">
+            <p class="small-font">
+                This website is intended for informational purposes only, and the content provided here may be updated periodically. The Mess reserves the right to modify the menu, announcements, and other details as necessary.
+                *Please note that the availability of extra messing is subject to change based on the Mess workload and item availability.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function validateSuggestion() {
+            const suggestion = document.getElementById('suggestion').value.trim();
+            if (suggestion === '') {
+                alert('Suggestion cannot be empty');
+                return false;
             }
-        </script>
-    </body>
-    </html>
+            return true;
+        }
+        function toggleComplaintForm() {
+            const form = document.getElementById('complaint-form');
+            const button = document.getElementById('toggle-complaint');
+            
+            // Toggle the display property
+            if (form.style.display === 'none') {
+                form.style.display = 'block';
+                button.textContent = 'Collapse Complaint Box';
+            } else {
+                form.style.display = 'none';
+                button.textContent = 'Expand Complaint Box';
+            }
+        }
+    </script>
+</body>
+</html>
