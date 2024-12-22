@@ -190,7 +190,39 @@
                 <button type="submit">Submit Suggestion</button>
             </form>
         </div>
+ <div class="announcement-section">
+            <h2>Announcements</h2>
+            <% if (announcements.length > 0) { %>
+                <% announcements.forEach(function(announcement) { 
+                    let announcementDate = new Date(announcement.created_at);
+                    announcementDate.setHours(announcementDate.getHours() + 5);
+                    announcementDate.setMinutes(announcementDate.getMinutes() + 30);
+                    let formattedDate = announcementDate.toLocaleDateString('en-IN', {
+                        weekday: 'short',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                    });
+                %>
+                <div class="announcement">
+                    <p><%= announcement.announcement %></p>
+                    <small class="small-font">[<%= formattedDate %>]</small>
+                </div>
+                <% }); %>
+            <% } else { %>
+                <div class="announcement">No announcements yet.</div>
+            <% } %>
+        </div>
 
+        <!-- Suggestion Box -->
+        <div class="form-section">
+            <h2>Suggestion Box</h2>
+            <form action="/submit-suggestion" method="POST" onsubmit="return validateSuggestion()">
+                <textarea id="suggestion" name="suggestion" rows="4" placeholder="Your suggestion..." required></textarea>
+                <button type="submit">Submit Suggestion</button>
+            </form>
+        </div>
         <!-- Complaint Box -->
         <div class="form-section">
             <h2>Complaint Box</h2>
