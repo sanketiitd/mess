@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="html2pdf.bundle.min.js"></script>
     <title>Shivalik Hostel Mess</title>
     <style>
         /* Basic Styling */
@@ -169,27 +170,9 @@
 
     <script>
         async function downloadPDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-
             // Grab the table element
             const table = document.getElementById('dataTable');
-
-            // Convert table rows into an array of data
-            const rows = Array.from(table.querySelectorAll('tr')).map(row =>
-                Array.from(row.querySelectorAll('th, td')).map(cell => cell.textContent)
-            );
-
-            // Add the table rows to the PDF
-            rows.forEach((row, index) => {
-                const y = 10 + (index * 10);
-                row.forEach((cell, cellIndex) => {
-                    doc.text(cell, 10 + (cellIndex * 50), y);
-                });
-            });
-
-            // Save the PDF
-            doc.save('table.pdf');
+            html2pdf(table);
         }
     </script>
 
